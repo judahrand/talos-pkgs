@@ -37,6 +37,51 @@ jobs:
     outputs:
       labels: ${{ steps.retrieve-pr-labels.outputs.result }}
 
+    strategy:
+      matrix:
+        target: [
+          apparmor,
+          base,
+          ca-certificates,
+          cni,
+          containerd,
+          cryptsetup,
+          dosfstools,
+          eudev,
+          fhs,
+          flannel-cni,
+          grub,
+          ipmitool,
+          iptables,
+          ipxe,
+          kmod,
+          libaio,
+          libinih,
+          libjson-c,
+          liblzma,
+          libpopt,
+          libseccomp,
+          liburcu,
+          linux-firmware,
+          lvm2,
+          musl,
+          openssl,
+          runc,
+          sd-boot,
+          socat,
+          syslinux,
+          util-linux,
+          xfsprogs,
+          kernel,
+          drbd-pkg,
+          gasket-driver-pkg,
+          nvidia-open-gpu-kernel-modules-lts-pkg,
+          nvidia-open-gpu-kernel-modules-production-pkg,
+          zfs-pkg,
+          nonfree-kmod-nvidia-lts-pkg,
+          nonfree-kmod-nvidia-production-pkg,
+        ]
+
     steps:
       - name: gather-system-info
         id: system-info
@@ -79,12 +124,7 @@ jobs:
       - name: Build
         if: github.event_name == 'pull_request'
         run: |
-          make
-
-      - name: Build nonfree
-        if: github.event_name == 'pull_request'
-        run: |
-          make nonfree
+          make ${{ matrix.target }}
 
       - name: Login to registry
         if: github.event_name != 'pull_request'
@@ -97,12 +137,7 @@ jobs:
       - name: Push to registry
         if: github.event_name != 'pull_request'
         run: |
-          make  PUSH=true
-
-      - name: Push nonfree
-        if: github.event_name != 'pull_request'
-        run: |
-          make nonfree PUSH=true
+          make ${{ matrix.target }} PUSH=true
 
       - name: Retrieve PR labels
         id: retrieve-pr-labels
