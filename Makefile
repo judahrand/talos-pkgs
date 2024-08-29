@@ -14,7 +14,7 @@ OPERATING_SYSTEM := $(shell uname -s | tr '[:upper:]' '[:lower:]')
 GOARCH := $(shell uname -m | sed 's/x86_64/amd64/' | sed 's/aarch64/arm64/')
 REGISTRY ?= ghcr.io
 USERNAME ?= judahrand
-REGISTRY_AND_USERNAME ?= $(REGISTRY)/$(USERNAME)
+REGISTRY_AND_USERNAME ?= $(REGISTRY)/$(USERNAME)/talos-pkgs
 KRES_IMAGE ?= ghcr.io/siderolabs/kres:latest
 CONFORMANCE_IMAGE ?= ghcr.io/siderolabs/conform:latest
 
